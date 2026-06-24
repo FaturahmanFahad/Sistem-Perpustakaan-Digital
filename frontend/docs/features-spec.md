@@ -25,3 +25,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #6: configure default dark mode settings in tailwind
 - **Detail:** Mendaftarkan class selector dark mode pada tailwind.config.js dan mengonfigurasi palet warna gelap standar.
 - **Status:** Selesai diuji.
+
+### Fitur #7: implement profile section in sidebar footer
+- **Detail:** Menambahkan informasi detail nama dan peran (role) pengguna aktif di bagian kaki menu Sidebar.
+- **Status:** Selesai diuji.
