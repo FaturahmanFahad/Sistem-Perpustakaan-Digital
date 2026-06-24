@@ -111,3 +111,6 @@ INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES ('Bintan
 
 -- Buku Tambahan #5
 INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES ('Ceros dan Batozar', 'Tere Liye', 'Gramedia Pustaka Utama', 2018, 3);
+
+-- Buku Tambahan #6
+INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES ('Komet', 'Tere Liye', 'Gramedia Pustaka Utama', 2018, 5);
