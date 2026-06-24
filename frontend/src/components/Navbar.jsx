@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LogOut, User, Bell, Search, Sun, Moon } from 'lucide-react';
 import API from '../services/api';
 
-function Navbar({ user, onLogout, theme, toggleTheme }) {
+function Navbar({ user, onLogout, theme, toggleTheme, onSearch }) {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [keyword, setKeyword] = useState('');
 
   // Fetch notifications from Backend API
   const fetchNotifications = async () => {
@@ -28,19 +31,30 @@ function Navbar({ user, onLogout, theme, toggleTheme }) {
     }
   }, [user]);
 
+  // Handle global search submit
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (onSearch) {
+      onSearch(keyword);
+    }
+    navigate('/books'); // Redirect to books catalog page to show results
+  };
+
   return (
     <header className="h-16 px-6 glass-panel border-b border-slate-800 dark:border-slate-800/80 flex items-center justify-between sticky top-0 z-40">
       {/* Search Bar section */}
-      <div className="flex items-center flex-1 max-w-md">
+      <form onSubmit={handleSearchSubmit} className="flex items-center flex-1 max-w-md">
         <div className="relative w-full">
           <Search className="absolute left-3 top-2.5 h-4.5 w-4.5 text-slate-400" />
           <input
             type="text"
             placeholder="Cari buku atau transaksi..."
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             className="w-full bg-slate-900 border border-slate-700 text-slate-100 pl-10 pr-4 py-2 rounded-lg text-sm focus:outline-none focus:border-teal-500 transition-colors"
           />
         </div>
-      </div>
+      </form>
 
       {/* User Actions Section */}
       <div className="flex items-center gap-4">

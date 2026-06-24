@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { Search, Plus, Edit, Trash2, BookOpen, AlertCircle, CheckCircle, X } from 'lucide-react';
 import { bookService, borrowingService } from '../services/api';
 
 function Books({ user, token }) {
+  const { searchKeyword } = useOutletContext() || {};
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -38,8 +40,8 @@ function Books({ user, token }) {
   };
 
   useEffect(() => {
-    fetchBooks();
-  }, [token]);
+    fetchBooks(searchKeyword || '');
+  }, [token, searchKeyword]);
 
   // Utility to handle search input
   const handleSearchSubmit = (e) => {

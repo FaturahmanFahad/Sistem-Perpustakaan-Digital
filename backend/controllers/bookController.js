@@ -4,8 +4,8 @@ class BookController {
     // Get all books with optional search filter
     static async getAllBooks(req, res, next) {
         try {
-            const { q } = req.query; // Search keyword
-            const books = await Book.findAll(q);
+            const searchQuery = req.query.search || req.query.q || '';
+            const books = await Book.findAll(searchQuery);
             return res.status(200).json({
                 success: true,
                 count: books.length,
