@@ -33,3 +33,7 @@ Dokumentasi teknis pengerjaan otorisasi dan sistem backend dasar:
 ### Fitur #8: configure secure httpOnly options for auth cookie header
 - **Detail:** Menambahkan skema header secure cookie sebagai opsi cadangan penyimpanan token JWT.
 - **Status:** Implementasi dasar selesai.
+
+### Fitur #9: implement login lockout strategy mock logic
+- **Detail:** Merancang kerangka login lockout (blokir login sementara) setelah 5 kali kegagalan input password.
+- **Status:** Implementasi dasar selesai.
