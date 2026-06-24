@@ -19,6 +19,20 @@ app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/borrowings', borrowingRoutes);
 
+// Endpoint Notifikasi Sederhana
+const { verifyToken } = require('./middlewares/authMiddleware');
+app.get('/api/notifications', verifyToken, (req, res) => {
+    const notifications = [
+        { id: 1, text: 'Buku "Laskar Pelangi" berhasil dipinjam.', type: 'info', time: '1 jam yang lalu' },
+        { id: 2, text: 'Tenggat pengembalian buku "Bumi Manusia" H-1.', type: 'warning', time: '3 jam yang lalu' },
+        { id: 3, text: 'Stok buku "Cantik Itu Luka" telah diperbarui oleh Admin.', type: 'success', time: '1 hari yang lalu' }
+    ];
+    res.json({
+        success: true,
+        data: notifications
+    });
+});
+
 // Home endpoint for testing connectivity
 app.get('/', (req, res) => {
     res.json({
