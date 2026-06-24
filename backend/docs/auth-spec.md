@@ -37,3 +37,7 @@ Dokumentasi teknis pengerjaan otorisasi dan sistem backend dasar:
 ### Fitur #9: implement login lockout strategy mock logic
 - **Detail:** Merancang kerangka login lockout (blokir login sementara) setelah 5 kali kegagalan input password.
 - **Status:** Implementasi dasar selesai.
+
+### Fitur #10: document auth api request/response schemas
+- **Detail:** Menulis panduan lengkap mengenai payload request JSON dan skema response HTTP untuk rute autentikasi.
+- **Status:** Implementasi dasar selesai.
