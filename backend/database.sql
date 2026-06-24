@@ -71,7 +71,7 @@ INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES
 ('Di Bawah Bendera Revolusi', 'Ir. Soekarno', 'Panitia Penerbit DBR', 1963, 2),
 ('Habis Gelap Terbitlah Terang', 'R.A. Kartini', 'Balai Pustaka', 1922, 5),
 ('Catatan Seorang Demonstran', 'Soe Hok Gie', 'LP3ES', 1983, 4),
-('Filosofi Teras', 'Henry Manampiring', 'Kompas Penerbit Buku', 2018, 15),
+('Filosofi Teras', 'Rifki Manampiring', 'Kompas Penerbit Buku', 2018, 15),
 ('Seni Tinggal di Bumi', 'Henry Manampiring', 'Kompas Penerbit Buku', 2022, 8),
 ('Sapiens: Riwayat Singkat Umat Manusia', 'Yuval Noah Harari', 'Kepustakaan Populer Gramedia', 2017, 10),
 ('Homo Deus: Masa Depan Umat Manusia', 'Yuval Noah Harari', 'Kepustakaan Populer Gramedia', 2018, 5),
@@ -94,7 +94,7 @@ INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES
 ('Outliers: Rahasia di Balik Sukses', 'Malcolm Gladwell', 'Gramedia Pustaka Utama', 2009, 6),
 ('Rich Dad Poor Dad', 'Robert T. Kiyosaki', 'Gramedia Pustaka Utama', 2016, 10),
 ('The Intelligent Investor', 'Benjamin Graham', 'Gramedia Pustaka Utama', 2018, 4),
-('Rahasia Magnet Rezeki', 'Nasrullah', 'Elex Media Komputindo', 2018, 8),
+('Rahasia Magnet Rezeki', 'Napaz Japaatul', 'Elex Media Komputindo', 2018, 8),
 ('Think and Grow Rich', 'Napoleon Hill', 'Gramedia Pustaka Utama', 2015, 7);
 
 -- Buku Tambahan #1
