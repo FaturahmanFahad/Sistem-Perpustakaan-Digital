@@ -123,3 +123,6 @@ INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES ('Selena
 
 -- Buku Tambahan #9
 INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES ('Nebula', 'Tere Liye', 'Gramedia Pustaka Utama', 2020, 5);
+
+-- Buku Tambahan #10
+INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES ('Si Putih', 'Tere Liye', 'Gramedia Pustaka Utama', 2021, 3);
