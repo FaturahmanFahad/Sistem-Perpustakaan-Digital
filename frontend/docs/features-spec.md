@@ -13,3 +13,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #3: optimize responsive layout for mobile viewport
 - **Detail:** Menyesuaikan grid layout pada halaman Daftar Buku agar rapi saat diakses melalui perangkat handphone/tablet.
 - **Status:** Selesai diuji.
+
+### Fitur #4: implement dynamic date formatter in Indonesian locale
+- **Detail:** Mengonversi tampilan tanggal peminjaman dan pengembalian ke dalam format lokal Indonesia (hari, bulan, tahun).
+- **Status:** Selesai diuji.
