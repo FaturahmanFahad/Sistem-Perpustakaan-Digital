@@ -17,3 +17,7 @@ Dokumentasi teknis pengerjaan otorisasi dan sistem backend dasar:
 ### Fitur #4: implement validation for password minimum length
 - **Detail:** Menambahkan aturan minimal panjang password sebanyak 6 karakter sebelum proses hashing.
 - **Status:** Implementasi dasar selesai.
+
+### Fitur #5: define cors options for allowed client origins
+- **Detail:** Mengatur middleware CORS untuk membatasi origin request hanya dari domain frontend localhost:3000.
+- **Status:** Implementasi dasar selesai.
