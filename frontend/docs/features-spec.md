@@ -21,3 +21,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #5: add toast notifications for transaction success
 - **Detail:** Mengintegrasikan banner pemberitahuan (alert) atas kesuksesan transaksi peminjaman dan pengembalian buku.
 - **Status:** Selesai diuji.
+
+### Fitur #6: configure default dark mode settings in tailwind
+- **Detail:** Mendaftarkan class selector dark mode pada tailwind.config.js dan mengonfigurasi palet warna gelap standar.
+- **Status:** Selesai diuji.
