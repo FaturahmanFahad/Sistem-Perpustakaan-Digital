@@ -9,3 +9,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #2: add loading spinner indicator on book search
 - **Detail:** Memasang spinner animasi loading saat melakukan pencarian buku agar UX terasa lebih interaktif.
 - **Status:** Selesai diuji.
+
+### Fitur #3: optimize responsive layout for mobile viewport
+- **Detail:** Menyesuaikan grid layout pada halaman Daftar Buku agar rapi saat diakses melalui perangkat handphone/tablet.
+- **Status:** Selesai diuji.
