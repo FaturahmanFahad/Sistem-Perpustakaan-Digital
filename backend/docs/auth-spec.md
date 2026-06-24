@@ -25,3 +25,7 @@ Dokumentasi teknis pengerjaan otorisasi dan sistem backend dasar:
 ### Fitur #6: set default role value to 'user' in userModel
 - **Detail:** Memastikan role default di tingkat model adalah 'user' untuk mencegah bypass privilese admin.
 - **Status:** Implementasi dasar selesai.
+
+### Fitur #7: add logging middleware for incoming auth requests
+- **Detail:** Memasang custom request logger di middleware untuk memantau trafik IP masuk pada rute autentikasi.
+- **Status:** Implementasi dasar selesai.
