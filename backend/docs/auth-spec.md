@@ -29,3 +29,7 @@ Dokumentasi teknis pengerjaan otorisasi dan sistem backend dasar:
 ### Fitur #7: add logging middleware for incoming auth requests
 - **Detail:** Memasang custom request logger di middleware untuk memantau trafik IP masuk pada rute autentikasi.
 - **Status:** Implementasi dasar selesai.
+
+### Fitur #8: configure secure httpOnly options for auth cookie header
+- **Detail:** Menambahkan skema header secure cookie sebagai opsi cadangan penyimpanan token JWT.
+- **Status:** Implementasi dasar selesai.
