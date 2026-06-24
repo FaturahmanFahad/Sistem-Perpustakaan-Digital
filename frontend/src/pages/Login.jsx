@@ -7,7 +7,6 @@ function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user'); // Default register role
   
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +20,7 @@ function Login({ onLoginSuccess }) {
 
     try {
       if (isRegister) {
-        const data = await authService.register(username, email, password, role);
+        const data = await authService.register(username, email, password, 'user');
         setSuccessMsg(data.message || 'Registrasi berhasil! Silakan login.');
         setIsRegister(false);
         setPassword('');
@@ -119,19 +118,7 @@ function Login({ onLoginSuccess }) {
             </div>
           </div>
 
-          {isRegister && (
-            <div>
-              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Pilih Role</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 px-4 py-2.5 rounded-lg text-sm focus:outline-none focus:border-teal-500 transition-colors"
-              >
-                <option value="user">Anggota (User)</option>
-                <option value="admin">Administrator (Admin)</option>
-              </select>
-            </div>
-          )}
+
 
           <button
             type="submit"
