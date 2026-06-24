@@ -29,3 +29,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #7: implement profile section in sidebar footer
 - **Detail:** Menambahkan informasi detail nama dan peran (role) pengguna aktif di bagian kaki menu Sidebar.
 - **Status:** Selesai diuji.
+
+### Fitur #8: restrict borrowing access for books with zero stock
+- **Detail:** Menonaktifkan tombol 'Pinjam Buku' secara dinamis apabila stok buku di katalog bernilai 0.
+- **Status:** Selesai diuji.
