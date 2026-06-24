@@ -21,3 +21,7 @@ Dokumentasi teknis pengerjaan otorisasi dan sistem backend dasar:
 ### Fitur #5: define cors options for allowed client origins
 - **Detail:** Mengatur middleware CORS untuk membatasi origin request hanya dari domain frontend localhost:3000.
 - **Status:** Implementasi dasar selesai.
+
+### Fitur #6: set default role value to 'user' in userModel
+- **Detail:** Memastikan role default di tingkat model adalah 'user' untuk mencegah bypass privilese admin.
+- **Status:** Implementasi dasar selesai.
