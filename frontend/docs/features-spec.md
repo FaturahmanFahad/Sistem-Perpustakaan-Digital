@@ -33,3 +33,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #8: restrict borrowing access for books with zero stock
 - **Detail:** Menonaktifkan tombol 'Pinjam Buku' secara dinamis apabila stok buku di katalog bernilai 0.
 - **Status:** Selesai diuji.
+
+### Fitur #9: add return verification dialog box
+- **Detail:** Membuat konfirmasi pop-up sebelum pengguna mengembalikan buku untuk menghindari salah klik.
+- **Status:** Selesai diuji.
