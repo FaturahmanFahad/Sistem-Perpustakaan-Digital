@@ -37,3 +37,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #9: add return verification dialog box
 - **Detail:** Membuat konfirmasi pop-up sebelum pengguna mengembalikan buku untuk menghindari salah klik.
 - **Status:** Selesai diuji.
+
+### Fitur #10: update project config settings and dependencies
+- **Detail:** Melakukan pembersihan file config yang tidak terpakai dan merapikan catatan dependensi package.json.
+- **Status:** Selesai diuji.
