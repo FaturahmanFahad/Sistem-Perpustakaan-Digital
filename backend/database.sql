@@ -96,3 +96,6 @@ INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES
 ('The Intelligent Investor', 'Benjamin Graham', 'Gramedia Pustaka Utama', 2018, 4),
 ('Rahasia Magnet Rezeki', 'Nasrullah', 'Elex Media Komputindo', 2018, 8),
 ('Think and Grow Rich', 'Napoleon Hill', 'Gramedia Pustaka Utama', 2015, 7);
+
+-- Buku Tambahan #1
+INSERT INTO books (judul, penulis, penerbit, tahun_terbit, stok) VALUES ('Bumi', 'Tere Liye', 'Gramedia Pustaka Utama', 2014, 5);
