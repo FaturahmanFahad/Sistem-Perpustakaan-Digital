@@ -17,3 +17,7 @@ Catatan teknis implementasi fitur dan optimasi sistem antarmuka perpustakaan:
 ### Fitur #4: implement dynamic date formatter in Indonesian locale
 - **Detail:** Mengonversi tampilan tanggal peminjaman dan pengembalian ke dalam format lokal Indonesia (hari, bulan, tahun).
 - **Status:** Selesai diuji.
+
+### Fitur #5: add toast notifications for transaction success
+- **Detail:** Mengintegrasikan banner pemberitahuan (alert) atas kesuksesan transaksi peminjaman dan pengembalian buku.
+- **Status:** Selesai diuji.
