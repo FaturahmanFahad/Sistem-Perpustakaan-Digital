@@ -81,4 +81,11 @@ export const borrowingService = {
   }
 };
 
+export const statsService = {
+  getTotalBooks: async () => {
+    const response = await API.get('/stats/total-books');
+    return response.data;
+  }
+};
+
 export default API;

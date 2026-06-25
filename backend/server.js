@@ -13,11 +13,13 @@ app.use(express.json()); // Parse JSON body payloads
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 const borrowingRoutes = require('./routes/borrowingRoutes');
+const statsRoutes = require('./routes/statsRoutes');
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/borrowings', borrowingRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Endpoint Notifikasi Sederhana
 const { verifyToken } = require('./middlewares/authMiddleware');

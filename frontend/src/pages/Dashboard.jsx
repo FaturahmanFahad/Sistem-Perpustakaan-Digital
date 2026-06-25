@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Users, ClipboardList, CheckCircle, ArrowUpRight, Plus, Eye } from 'lucide-react';
-import { borrowingService } from '../services/api';
+import { borrowingService, statsService } from '../services/api';
 
 function Dashboard({ user, token }) {
   const navigate = useNavigate();
@@ -17,10 +17,26 @@ function Dashboard({ user, token }) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const data = await borrowingService.getStats();
-        if (data.success) {
-          setStats(data.data);
+        const [statsRes, totalBooksRes] = await Promise.all([
+          borrowingService.getStats(),
+          statsService.getTotalBooks()
+        ]);
+
+        let combinedStats = {
+          total_books: 0,
+          total_users: 0,
+          active_borrowings: 0,
+          total_borrowings: 0
+        };
+
+        if (statsRes && statsRes.success) {
+          combinedStats = { ...combinedStats, ...statsRes.data };
         }
+        if (totalBooksRes && totalBooksRes.success) {
+          combinedStats.total_books = totalBooksRes.data.total;
+        }
+
+        setStats(combinedStats);
       } catch (err) {
         setError(err.response?.data?.message || err.message || 'Gagal memuat statistik sistem.');
       } finally {
