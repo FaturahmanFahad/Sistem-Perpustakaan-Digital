@@ -88,4 +88,11 @@ export const statsService = {
   }
 };
 
+export const memberService = {
+  getAll: async () => {
+    const response = await API.get('/members');
+    return response.data;
+  }
+};
+
 export default API;

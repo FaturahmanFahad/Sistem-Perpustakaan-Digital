@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { BookOpen, Users, ClipboardList, CheckCircle, ArrowUpRight, Plus, Eye } from 'lucide-react';
 import { borrowingService, statsService } from '../services/api';
 
@@ -63,9 +63,10 @@ function Dashboard({ user, token }) {
     {
       title: 'Anggota Aktif',
       value: stats.total_users,
-      desc: 'Anggota perpustakaan terdaftar',
+      desc: 'Anggota perpustakaan terdaftar (Klik detail)',
       icon: Users,
-      color: 'from-indigo-500/20 to-cyan-500/20 text-cyan-400 border-cyan-500/30'
+      color: 'from-indigo-500/20 to-cyan-500/20 text-cyan-400 border-cyan-500/30 hover:scale-[1.02] hover:shadow-xl transition-all duration-200 cursor-pointer',
+      link: '/members'
     },
     {
       title: 'Buku Sedang Dipinjam',
@@ -113,8 +114,8 @@ function Dashboard({ user, token }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {statCards.map((card, idx) => {
             const Icon = card.icon;
-            return (
-              <div key={idx} className={`glass-card p-6 rounded-xl flex flex-col justify-between border bg-gradient-to-br ${card.color}`}>
+            const CardContent = (
+              <>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-slate-400 tracking-wide">{card.title}</span>
                   <div className="p-2 bg-slate-950/40 rounded-lg">
@@ -125,6 +126,24 @@ function Dashboard({ user, token }) {
                   <h3 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">{card.value}</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{card.desc}</p>
                 </div>
+              </>
+            );
+
+            if (card.link) {
+              return (
+                <Link
+                  key={idx}
+                  to={card.link}
+                  className={`glass-card p-6 rounded-xl flex flex-col justify-between border bg-gradient-to-br ${card.color} block`}
+                >
+                  {CardContent}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={idx} className={`glass-card p-6 rounded-xl flex flex-col justify-between border bg-gradient-to-br ${card.color}`}>
+                {CardContent}
               </div>
             );
           })}

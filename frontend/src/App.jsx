@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Books from './pages/Books';
 import Borrowings from './pages/Borrowings';
+import Members from './pages/Members';
 import useTheme from './hooks/useTheme';
 
 function App() {
@@ -99,6 +100,11 @@ function App() {
           <Route 
             path="history" 
             element={<Borrowings user={user} token={token} filterStatus="semua" />} 
+          />
+
+          <Route 
+            path="members" 
+            element={<Members user={user} token={token} />} 
           />
         </Route>
 
