@@ -71,9 +71,10 @@ function Dashboard({ user, token }) {
     {
       title: 'Buku Sedang Dipinjam',
       value: stats.active_borrowings,
-      desc: 'Transaksi peminjaman berjalan',
+      desc: 'Transaksi peminjaman berjalan (Klik detail)',
       icon: ClipboardList,
-      color: 'from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/30'
+      color: 'from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/30 hover:scale-[1.02] hover:shadow-xl transition-all duration-200 cursor-pointer',
+      link: '/borrowings'
     },
     {
       title: 'Rasio Pengembalian',
