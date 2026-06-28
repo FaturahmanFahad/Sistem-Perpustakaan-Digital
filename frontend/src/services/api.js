@@ -28,8 +28,8 @@ export const authService = {
     const response = await API.post('/auth/login', { email, password });
     return response.data;
   },
-  register: async (username, email, password, role) => {
-    const response = await API.post('/auth/register', { username, email, password, role });
+  register: async (username, email, password, confirmPassword, role) => {
+    const response = await API.post('/auth/register', { username, email, password, confirmPassword, role });
     return response.data;
   }
 };

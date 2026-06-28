@@ -7,6 +7,7 @@ function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,10 +26,16 @@ function Login({ onLoginSuccess }) {
           setLoading(false);
           return;
         }
-        const data = await authService.register(username, email, password, 'user');
+        if (password !== confirmPassword) {
+          setError('Kata sandi dan konfirmasi kata sandi tidak cocok!');
+          setLoading(false);
+          return;
+        }
+        const data = await authService.register(username, email, password, confirmPassword, 'user');
         setSuccessMsg(data.message || 'Registrasi berhasil! Silakan login.');
         setIsRegister(false);
         setPassword('');
+        setConfirmPassword('');
       } else {
         const data = await authService.login(email, password);
         // Logged in successfully
@@ -122,6 +129,23 @@ function Login({ onLoginSuccess }) {
               />
             </div>
           </div>
+
+          {isRegister && (
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Konfirmasi Kata Sandi</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 pl-10 pr-4 py-2.5 rounded-lg text-sm focus:outline-none focus:border-teal-500 transition-colors"
+                />
+              </div>
+            </div>
+          )}
 
 
 

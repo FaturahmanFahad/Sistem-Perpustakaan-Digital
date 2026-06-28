@@ -6,13 +6,21 @@ class AuthController {
     // Register User
     static async register(req, res, next) {
         try {
-            const { username, email, password, role } = req.body;
+            const { username, email, password, confirmPassword, role } = req.body;
 
             // Form Validation (Backend)
-            if (!username || !email || !password) {
+            if (!username || !email || !password || !confirmPassword) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Username, email, dan password wajib diisi.'
+                    message: 'Username, email, password, dan konfirmasi password wajib diisi.'
+                });
+            }
+
+            // Validate that password and confirmPassword match
+            if (password !== confirmPassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Password matching validation failed'
                 });
             }
 
