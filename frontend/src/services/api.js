@@ -58,6 +58,10 @@ export const bookService = {
   delete: async (id) => {
     const response = await API.delete(`/books/${id}`);
     return response.data;
+  },
+  getRecommendations: async () => {
+    const response = await API.get('/books/recommendations');
+    return response.data;
   }
 };
 
@@ -91,6 +95,10 @@ export const statsService = {
   },
   getReturnRatio: async () => {
     const response = await API.get('/stats/return-ratio');
+    return response.data;
+  },
+  getUserStats: async () => {
+    const response = await API.get('/user/dashboard-stats');
     return response.data;
   }
 };

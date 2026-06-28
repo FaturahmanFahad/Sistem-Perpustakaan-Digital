@@ -42,4 +42,39 @@ router.put('/update-name', verifyToken, async (req, res, next) => {
     }
 });
 
+// GET /api/user/dashboard-stats
+router.get('/dashboard-stats', verifyToken, async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+
+        // 1. Count active borrowings
+        const [[{ active_borrowings }]] = await db.query(
+            "SELECT COUNT(*) as active_borrowings FROM borrowings WHERE user_id = ? AND status = 'dipinjam'",
+            [userId]
+        );
+
+        // 2. Closest due date
+        const [[{ closest_due_date }]] = await db.query(
+            "SELECT MIN(tanggal_tenggat) as closest_due_date FROM borrowings WHERE user_id = ? AND status = 'dipinjam'",
+            [userId]
+        );
+
+        // 3. Max loan quota = 3
+        const maxQuota = 3;
+        const remainingQuota = Math.max(0, maxQuota - active_borrowings);
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                active_borrowings,
+                closest_due_date: closest_due_date || null,
+                remaining_quota: remainingQuota,
+                max_quota: maxQuota
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = router;

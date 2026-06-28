@@ -71,6 +71,16 @@ class Book {
         }
     }
 
+    // Fetch popular/recommended books (limit 6)
+    static async findRecommendations() {
+        try {
+            const [rows] = await db.query('SELECT * FROM books ORDER BY id DESC LIMIT 6');
+            return rows.map(b => new Book(b.id, b.judul, b.penulis, b.penerbit, b.tahun_terbit, b.stok, b.created_at));
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // Fetch details of a single book by ID
     static async findById(id) {
         try {

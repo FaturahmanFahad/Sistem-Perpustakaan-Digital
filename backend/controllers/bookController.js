@@ -21,6 +21,20 @@ class BookController {
         }
     }
 
+    // Get recommended books
+    static async getRecommendations(req, res, next) {
+        try {
+            const books = await Book.findRecommendations();
+            return res.status(200).json({
+                success: true,
+                count: books.length,
+                data: books
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     // Get single book details
     static async getBookById(req, res, next) {
         try {
