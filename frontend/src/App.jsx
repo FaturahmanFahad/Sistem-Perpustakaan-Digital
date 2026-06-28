@@ -97,10 +97,7 @@ function App() {
             element={<Borrowings user={user} token={token} filterStatus="kembali" />} 
           />
           
-          <Route 
-            path="history" 
-            element={<Borrowings user={user} token={token} filterStatus="semua" />} 
-          />
+
 
           <Route 
             path="members" 

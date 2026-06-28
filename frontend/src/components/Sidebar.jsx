@@ -27,12 +27,6 @@ function Sidebar({ user }) {
       label: 'Pengembalian',
       icon: CheckCircle,
       roles: ['admin', 'user']
-    },
-    {
-      to: '/history',
-      label: 'Riwayat Peminjaman dan Pengembalian',
-      icon: History,
-      roles: ['admin', 'user']
     }
   ];
 
