@@ -35,9 +35,12 @@ export const authService = {
 };
 
 export const bookService = {
-  getAll: async (query = '') => {
-    const url = query ? `/books?q=${encodeURIComponent(query)}` : '/books';
-    const response = await API.get(url);
+  getAll: async (query = '', page = 1, limit = 10) => {
+    const params = new URLSearchParams();
+    if (query) params.append('q', query);
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+    const response = await API.get(`/books?${params.toString()}`);
     return response.data;
   },
   getById: async (id) => {

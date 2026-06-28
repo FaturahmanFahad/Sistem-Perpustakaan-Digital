@@ -30,6 +30,47 @@ class Book {
         }
     }
 
+    // Fetch paginated books
+    static async findPaginated(searchQuery = '', page = 1, limit = 10) {
+        try {
+            const pageNum = parseInt(page) || 1;
+            const limitNum = parseInt(limit) || 10;
+            const offset = (pageNum - 1) * limitNum;
+
+            let countSql = 'SELECT COUNT(*) as total FROM books';
+            let sql = 'SELECT * FROM books';
+            let params = [];
+
+            if (searchQuery) {
+                const whereClause = ' WHERE judul LIKE ? OR penulis LIKE ? OR penerbit LIKE ?';
+                countSql += whereClause;
+                sql += whereClause;
+                const likeQuery = `%${searchQuery}%`;
+                params = [likeQuery, likeQuery, likeQuery];
+            }
+
+            const [[{ total }]] = await db.query(countSql, params);
+
+            sql += ' ORDER BY id DESC LIMIT ? OFFSET ?';
+            const queryParams = [...params, limitNum, offset];
+            const [rows] = await db.query(sql, queryParams);
+
+            const books = rows.map(b => new Book(b.id, b.judul, b.penulis, b.penerbit, b.tahun_terbit, b.stok, b.created_at));
+
+            return {
+                books,
+                pagination: {
+                    currentPage: pageNum,
+                    limit: limitNum,
+                    totalItems: total,
+                    totalPages: Math.ceil(total / limitNum) || 1
+                }
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // Fetch details of a single book by ID
     static async findById(id) {
         try {

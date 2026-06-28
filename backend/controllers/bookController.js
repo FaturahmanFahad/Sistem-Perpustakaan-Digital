@@ -1,15 +1,20 @@
 const Book = require('../models/bookModel');
 
 class BookController {
-    // Get all books with optional search filter
+    // Get all books with optional search filter and pagination
     static async getAllBooks(req, res, next) {
         try {
             const searchQuery = req.query.search || req.query.q || '';
-            const books = await Book.findAll(searchQuery);
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+
+            const { books, pagination } = await Book.findPaginated(searchQuery, page, limit);
+
             return res.status(200).json({
                 success: true,
                 count: books.length,
-                data: books
+                data: books,
+                pagination
             });
         } catch (error) {
             next(error);

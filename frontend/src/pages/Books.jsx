@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Search, Plus, Edit, Trash2, BookOpen, AlertCircle, CheckCircle, X } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, BookOpen, AlertCircle, CheckCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { bookService, borrowingService } from '../services/api';
 
 function Books({ user, token }) {
@@ -22,6 +22,12 @@ function Books({ user, token }) {
   const [borrowBookId, setBorrowBookId] = useState(null);
   const [borrowBookTitle, setBorrowBookTitle] = useState('');
   const [borrowDuration, setBorrowDuration] = useState(7);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const limit = 10;
   
   // Form fields
   const [judul, setJudul] = useState('');
@@ -31,12 +37,17 @@ function Books({ user, token }) {
   const [stok, setStok] = useState('');
 
   // Fetch book collections
-  const fetchBooks = async (query = '') => {
+  const fetchBooks = async (query = '', page = 1) => {
     setLoading(true);
     try {
-      const data = await bookService.getAll(query);
+      const data = await bookService.getAll(query, page, limit);
       if (data.success) {
         setBooks(data.data);
+        if (data.pagination) {
+          setCurrentPage(data.pagination.currentPage);
+          setTotalPages(data.pagination.totalPages);
+          setTotalItems(data.pagination.totalItems);
+        }
       }
     } catch (err) {
       showAlert(err.response?.data?.message || err.message || 'Gagal menghubungi server database.', 'error');
@@ -46,13 +57,22 @@ function Books({ user, token }) {
   };
 
   useEffect(() => {
-    fetchBooks(searchKeyword || '');
+    setCurrentPage(1);
+    fetchBooks(searchKeyword || '', 1);
   }, [token, searchKeyword]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      fetchBooks(search || searchKeyword || '', newPage);
+    }
+  };
 
   // Utility to handle search input
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchBooks(search);
+    setCurrentPage(1);
+    fetchBooks(search, 1);
   };
 
   // Helper to show flash alert message
@@ -295,6 +315,52 @@ function Books({ user, token }) {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 0 && (
+            <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-900/20">
+              <div className="text-xs text-slate-500 dark:text-slate-400">
+                Menampilkan <span className="font-semibold text-slate-800 dark:text-slate-200">{books.length}</span> dari <span className="font-semibold text-slate-800 dark:text-slate-200">{totalItems}</span> buku (Halaman <span className="font-semibold text-slate-800 dark:text-slate-200">{currentPage}</span> dari <span className="font-semibold text-slate-800 dark:text-slate-200">{totalPages}</span>)
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  title="Halaman Sebelumnya"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+
+                {[...Array(totalPages)].map((_, idx) => {
+                  const pageNum = idx + 1;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`h-8 w-8 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center ${
+                        currentPage === pageNum
+                          ? 'bg-teal-500 text-white shadow-md shadow-teal-500/20'
+                          : 'border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  title="Halaman Selanjutnya"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
