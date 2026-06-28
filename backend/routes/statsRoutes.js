@@ -39,4 +39,29 @@ router.get('/borrowed-details', verifyToken, async (req, res, next) => {
     }
 });
 
+// GET /api/stats/return-ratio (Get return ratio percentage and performance insights)
+router.get('/return-ratio', verifyToken, async (req, res, next) => {
+    try {
+        const [[{ total }]] = await db.query('SELECT COUNT(*) AS total FROM borrowings');
+        const [[{ returned }]] = await db.query("SELECT COUNT(*) AS returned FROM borrowings WHERE status = 'kembali'");
+        const [[{ tepat_waktu }]] = await db.query("SELECT COUNT(*) AS tepat_waktu FROM borrowings WHERE status = 'kembali' AND DATEDIFF(tanggal_kembali, tanggal_pinjam) <= 7");
+        const [[{ terlambat }]] = await db.query("SELECT COUNT(*) AS terlambat FROM borrowings WHERE status = 'kembali' AND DATEDIFF(tanggal_kembali, tanggal_pinjam) > 7");
+
+        const ratio = total > 0 ? Math.round((returned / total) * 100) : 0;
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                ratio: ratio,
+                total_borrowings: total,
+                total_returned: returned,
+                tepat_waktu: tepat_waktu,
+                terlambat: terlambat
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = router;

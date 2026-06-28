@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ClipboardList, Calendar, CheckCircle, Clock, AlertCircle, RefreshCw, History, Receipt } from 'lucide-react';
-import { borrowingService } from '../services/api';
+import { borrowingService, statsService } from '../services/api';
 
 function Borrowings({ user, token, filterStatus = 'semua' }) {
   const [borrowings, setBorrowings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ text: '', type: '' });
+  const [ratioStats, setRatioStats] = useState(null);
 
   // Fetch borrowing history logs
   const fetchBorrowings = async () => {
@@ -17,6 +18,13 @@ function Borrowings({ user, token, filterStatus = 'semua' }) {
       if (data.success) {
         setBorrowings(data.data);
       }
+
+      if (filterStatus === 'semua') {
+        const statsData = await statsService.getReturnRatio();
+        if (statsData.success) {
+          setRatioStats(statsData.data);
+        }
+      }
     } catch (err) {
       showAlert(err.response?.data?.message || err.message || 'Gagal memuat riwayat peminjaman.', 'error');
     } finally {
@@ -26,7 +34,7 @@ function Borrowings({ user, token, filterStatus = 'semua' }) {
 
   useEffect(() => {
     fetchBorrowings();
-  }, [token, user]);
+  }, [token, user, filterStatus]);
 
   // Flash Alert message utility
   const showAlert = (text, type) => {
@@ -127,6 +135,38 @@ function Borrowings({ user, token, filterStatus = 'semua' }) {
         }`}>
           {message.type === 'success' ? <CheckCircle className="h-5 w-5 shrink-0" /> : <AlertCircle className="h-5 w-5 shrink-0" />}
           <span>{message.text}</span>
+        </div>
+      )}
+
+      {/* Analytical Insights for Return Performance */}
+      {filterStatus === 'semua' && ratioStats && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-5 rounded-xl flex flex-col justify-between shadow-sm">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Rasio Kepatuhan</span>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-teal-500 dark:text-teal-400">{ratioStats.ratio}%</span>
+              <span className="text-xs text-slate-500">dari total transaksi</span>
+            </div>
+            <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+              <div className="bg-teal-500 h-2 rounded-full" style={{ width: `${ratioStats.ratio}%` }}></div>
+            </div>
+          </div>
+          <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-5 rounded-xl shadow-sm">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tepat Waktu</span>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-emerald-500 dark:text-emerald-400">{ratioStats.tepat_waktu}</span>
+              <span className="text-xs text-slate-500">buku dikembalikan</span>
+            </div>
+            <p className="text-[10px] text-emerald-500 mt-2 font-semibold">✓ Dikembalikan dalam batas tenggat waktu 7 hari</p>
+          </div>
+          <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-5 rounded-xl shadow-sm">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Terlambat / Denda</span>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-rose-500 dark:text-rose-400">{ratioStats.terlambat}</span>
+              <span className="text-xs text-slate-500">transaksi terlambat</span>
+            </div>
+            <p className="text-[10px] text-rose-500 mt-2 font-semibold">⚠ Melebihi batas tenggat waktu 7 hari (denda berlaku)</p>
+          </div>
         </div>
       )}
 

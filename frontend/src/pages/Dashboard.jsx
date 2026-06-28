@@ -9,7 +9,8 @@ function Dashboard({ user, token }) {
     total_books: 0,
     total_users: 0,
     active_borrowings: 0,
-    total_borrowings: 0
+    total_borrowings: 0,
+    return_ratio: 0
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -17,16 +18,18 @@ function Dashboard({ user, token }) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [statsRes, totalBooksRes] = await Promise.all([
+        const [statsRes, totalBooksRes, returnRatioRes] = await Promise.all([
           borrowingService.getStats(),
-          statsService.getTotalBooks()
+          statsService.getTotalBooks(),
+          statsService.getReturnRatio()
         ]);
 
         let combinedStats = {
           total_books: 0,
           total_users: 0,
           active_borrowings: 0,
-          total_borrowings: 0
+          total_borrowings: 0,
+          return_ratio: 0
         };
 
         if (statsRes && statsRes.success) {
@@ -34,6 +37,9 @@ function Dashboard({ user, token }) {
         }
         if (totalBooksRes && totalBooksRes.success) {
           combinedStats.total_books = totalBooksRes.data.total;
+        }
+        if (returnRatioRes && returnRatioRes.success) {
+          combinedStats.return_ratio = returnRatioRes.data.ratio;
         }
 
         setStats(combinedStats);
@@ -78,10 +84,11 @@ function Dashboard({ user, token }) {
     },
     {
       title: 'Rasio Pengembalian',
-      value: `${returnRate}%`,
-      desc: 'Persentase pengembalian buku',
+      value: `${stats.return_ratio !== undefined ? stats.return_ratio : 0}%`,
+      desc: 'Persentase pengembalian buku (Klik analitik)',
       icon: CheckCircle,
-      color: 'from-fuchsia-500/20 to-rose-500/20 text-rose-400 border-rose-500/30'
+      color: 'from-fuchsia-500/20 to-rose-500/20 text-rose-400 border-rose-500/30 hover:scale-[1.02] hover:shadow-xl transition-all duration-200 cursor-pointer',
+      link: '/history'
     }
   ];
 

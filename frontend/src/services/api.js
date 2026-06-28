@@ -85,6 +85,10 @@ export const statsService = {
   getTotalBooks: async () => {
     const response = await API.get('/stats/total-books');
     return response.data;
+  },
+  getReturnRatio: async () => {
+    const response = await API.get('/stats/return-ratio');
+    return response.data;
   }
 };
 
