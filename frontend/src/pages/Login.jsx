@@ -21,8 +21,12 @@ function Login({ onLoginSuccess }) {
 
     try {
       if (isRegister) {
-        if (username !== email) {
-          setError('Username harus sama dengan Email Anda!');
+        const usernameWords = username.toLowerCase().trim().split(/\s+/).filter(w => w.length > 0);
+        const cleanEmail = email.toLowerCase().trim();
+        const isMatched = usernameWords.some(word => cleanEmail.includes(word));
+        
+        if (!isMatched) {
+          setError('Email harus mengandung unsur nama dari Username Anda!');
           setLoading(false);
           return;
         }

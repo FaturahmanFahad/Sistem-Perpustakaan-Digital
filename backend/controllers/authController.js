@@ -24,11 +24,15 @@ class AuthController {
                 });
             }
 
-            // Enforce username and email match alignment constraint
-            if (username !== email) {
+            // Enforce email containing partial username elements constraint
+            const usernameWords = username.toLowerCase().trim().split(/\s+/).filter(w => w.length > 0);
+            const cleanEmail = email.toLowerCase().trim();
+            const isMatched = usernameWords.some(word => cleanEmail.includes(word));
+
+            if (!isMatched) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Username harus sama dengan Email Anda!'
+                    message: 'Email harus mengandung unsur nama dari Username Anda!'
                 });
             }
 
