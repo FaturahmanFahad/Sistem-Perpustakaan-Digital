@@ -59,8 +59,8 @@ export const bookService = {
 };
 
 export const borrowingService = {
-  borrow: async (bookId) => {
-    const response = await API.post('/borrowings/borrow', { bookId });
+  borrow: async (bookId, durasi) => {
+    const response = await API.post('/borrowings/borrow', { bookId, durasi });
     return response.data;
   },
   returnBook: async (borrowingId) => {

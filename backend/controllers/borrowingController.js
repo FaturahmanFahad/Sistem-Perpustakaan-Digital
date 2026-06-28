@@ -4,7 +4,7 @@ class BorrowingController {
     // User borrows a book
     static async borrowBook(req, res, next) {
         try {
-            const { bookId } = req.body;
+            const { bookId, durasi } = req.body;
             const userId = req.user.id; // From verifyToken middleware
 
             if (!bookId) {
@@ -14,9 +14,15 @@ class BorrowingController {
                 });
             }
 
-            const tanggalPinjam = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            const pinjamDate = new Date();
+            const tanggalPinjam = pinjamDate.toISOString().split('T')[0]; // YYYY-MM-DD
             
-            const borrowingId = await Borrowing.create(userId, bookId, tanggalPinjam);
+            const days = parseInt(durasi) || 7;
+            const tenggatDate = new Date();
+            tenggatDate.setDate(pinjamDate.getDate() + days);
+            const tanggalTenggat = tenggatDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            
+            const borrowingId = await Borrowing.create(userId, bookId, tanggalPinjam, tanggalTenggat);
             
             return res.status(201).json({
                 success: true,
@@ -26,6 +32,7 @@ class BorrowingController {
                     userId,
                     bookId,
                     tanggalPinjam,
+                    tanggalTenggat,
                     status: 'dipinjam'
                 }
             });

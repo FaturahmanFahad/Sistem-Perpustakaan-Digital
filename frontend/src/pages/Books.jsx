@@ -17,6 +17,12 @@ function Books({ user, token }) {
   const [isEdit, setIsEdit] = useState(false);
   const [currentBookId, setCurrentBookId] = useState(null);
   
+  // Borrow Modal states
+  const [showBorrowModal, setShowBorrowModal] = useState(false);
+  const [borrowBookId, setBorrowBookId] = useState(null);
+  const [borrowBookTitle, setBorrowBookTitle] = useState('');
+  const [borrowDuration, setBorrowDuration] = useState(7);
+  
   // Form fields
   const [judul, setJudul] = useState('');
   const [penulis, setPenulis] = useState('');
@@ -127,15 +133,34 @@ function Books({ user, token }) {
     }
   };
 
-  // Borrow Book handler
-  const handleBorrowBook = async (bookId) => {
+  // Borrow Book handlers
+  const triggerBorrowModal = (bookId, bookTitle) => {
+    setBorrowBookId(bookId);
+    setBorrowBookTitle(bookTitle);
+    setBorrowDuration(7);
+    setShowBorrowModal(true);
+  };
+
+  const submitBorrowBook = async () => {
+    setShowBorrowModal(false);
     try {
-      const data = await borrowingService.borrow(bookId);
+      const data = await borrowingService.borrow(borrowBookId, borrowDuration);
       showAlert(data.message || 'Buku berhasil dipinjam.', 'success');
       fetchBooks(search); // Refresh lists to show new stock level
     } catch (err) {
       showAlert(err.response?.data?.message || err.message || 'Gagal meminjam buku.', 'error');
     }
+  };
+
+  const getDueDateString = (days) => {
+    const d = new Date();
+    d.setDate(d.getDate() + parseInt(days));
+    return d.toLocaleDateString('id-ID', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
   };
 
   return (
@@ -257,7 +282,7 @@ function Books({ user, token }) {
                         </div>
                       ) : (
                         <button
-                          onClick={() => handleBorrowBook(book.id)}
+                          onClick={() => triggerBorrowModal(book.id, book.judul)}
                           disabled={book.stok <= 0}
                           className="px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 disabled:bg-slate-200 disabled:text-slate-400 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold text-xs transition-colors shadow-sm"
                         >
@@ -366,6 +391,68 @@ function Books({ user, token }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Borrow Confirmation Modal */}
+      {showBorrowModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden animate-in fade-in duration-200">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-teal-500" />
+                Konfirmasi Peminjaman
+              </h3>
+              <button 
+                onClick={() => setShowBorrowModal(false)}
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-100 transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Apakah Anda yakin ingin meminjam buku <span className="font-bold text-slate-800 dark:text-slate-100">"{borrowBookTitle}"</span>?
+              </p>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Durasi Peminjaman</label>
+                <select
+                  value={borrowDuration}
+                  onChange={(e) => setBorrowDuration(parseInt(e.target.value))}
+                  className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 px-4 py-2.5 rounded-lg text-sm focus:outline-none focus:border-teal-500 transition-colors cursor-pointer"
+                >
+                  <option value={3}>3 Hari</option>
+                  <option value={5}>5 Hari</option>
+                  <option value={7}>7 Hari (Default)</option>
+                  <option value={14}>14 Hari</option>
+                </select>
+              </div>
+
+              <div className="p-4 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 text-xs">
+                <p className="font-medium">⚠ Informasi Tenggat Waktu:</p>
+                <p className="mt-1">Buku ini harus dikembalikan paling lambat pada: <span className="font-bold">{getDueDateString(borrowDuration)}</span></p>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2 border-t border-slate-200 dark:border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setShowBorrowModal(false)}
+                  className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm font-semibold border border-slate-300 dark:border-slate-700 transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="button"
+                  onClick={submitBorrowBook}
+                  className="px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold transition-colors"
+                >
+                  Ya, Pinjam
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

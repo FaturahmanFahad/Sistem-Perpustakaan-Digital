@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS borrowings (
     user_id INT NOT NULL,
     book_id INT NOT NULL,
     tanggal_pinjam DATE NOT NULL,
+    tanggal_tenggat DATE DEFAULT NULL,
     tanggal_kembali DATE DEFAULT NULL,
     status ENUM('dipinjam', 'kembali') NOT NULL DEFAULT 'dipinjam',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

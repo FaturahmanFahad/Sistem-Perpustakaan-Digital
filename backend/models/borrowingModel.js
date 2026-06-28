@@ -1,11 +1,12 @@
 const db = require('../config/db');
 
 class Borrowing {
-    constructor(id, user_id, book_id, tanggal_pinjam, tanggal_kembali, status, username, judul, created_at) {
+    constructor(id, user_id, book_id, tanggal_pinjam, tanggal_tenggat, tanggal_kembali, status, username, judul, created_at) {
         this.id = id;
         this.user_id = user_id;
         this.book_id = book_id;
         this.tanggal_pinjam = tanggal_pinjam;
+        this.tanggal_tenggat = tanggal_tenggat;
         this.tanggal_kembali = tanggal_kembali;
         this.status = status;
         this.username = username; // Joined field
@@ -25,7 +26,7 @@ class Borrowing {
             );
             if (rows.length === 0) return null;
             const r = rows[0];
-            return new Borrowing(r.id, r.user_id, r.book_id, r.tanggal_pinjam, r.tanggal_kembali, r.status, r.username, r.judul, r.created_at);
+            return new Borrowing(r.id, r.user_id, r.book_id, r.tanggal_pinjam, r.tanggal_tenggat, r.tanggal_kembali, r.status, r.username, r.judul, r.created_at);
         } catch (error) {
             throw error;
         }
@@ -41,7 +42,7 @@ class Borrowing {
                  JOIN books b ON br.book_id = b.id
                  ORDER BY br.tanggal_pinjam DESC`
             );
-            return rows.map(r => new Borrowing(r.id, r.user_id, r.book_id, r.tanggal_pinjam, r.tanggal_kembali, r.status, r.username, r.judul, r.created_at));
+            return rows.map(r => new Borrowing(r.id, r.user_id, r.book_id, r.tanggal_pinjam, r.tanggal_tenggat, r.tanggal_kembali, r.status, r.username, r.judul, r.created_at));
         } catch (error) {
             throw error;
         }
@@ -59,14 +60,14 @@ class Borrowing {
                  ORDER BY br.tanggal_pinjam DESC`,
                 [userId]
             );
-            return rows.map(r => new Borrowing(r.id, r.user_id, r.book_id, r.tanggal_pinjam, r.tanggal_kembali, r.status, r.username, r.judul, r.created_at));
+            return rows.map(r => new Borrowing(r.id, r.user_id, r.book_id, r.tanggal_pinjam, r.tanggal_tenggat, r.tanggal_kembali, r.status, r.username, r.judul, r.created_at));
         } catch (error) {
             throw error;
         }
     }
 
     // Create a borrowing record (decrements stock by 1)
-    static async create(userId, bookId, tanggalPinjam) {
+    static async create(userId, bookId, tanggalPinjam, tanggalTenggat) {
         const connection = await db.getConnection();
         try {
             await connection.beginTransaction();
@@ -82,8 +83,8 @@ class Borrowing {
 
             // 2. Insert borrowing record
             const [result] = await connection.query(
-                'INSERT INTO borrowings (user_id, book_id, tanggal_pinjam, status) VALUES (?, ?, ?, ?)',
-                [userId, bookId, tanggalPinjam, 'dipinjam']
+                'INSERT INTO borrowings (user_id, book_id, tanggal_pinjam, tanggal_tenggat, status) VALUES (?, ?, ?, ?, ?)',
+                [userId, bookId, tanggalPinjam, tanggalTenggat, 'dipinjam']
             );
 
             // 3. Decrement book stock
