@@ -16,6 +16,14 @@ class AuthController {
                 });
             }
 
+            // Enforce username and email match alignment constraint
+            if (username !== email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Username harus sama dengan Email Anda!'
+                });
+            }
+
             // Check if user already exists
             const existingUser = await User.findByEmail(email);
             if (existingUser) {

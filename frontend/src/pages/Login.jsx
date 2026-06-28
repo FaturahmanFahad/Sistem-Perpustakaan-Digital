@@ -20,6 +20,11 @@ function Login({ onLoginSuccess }) {
 
     try {
       if (isRegister) {
+        if (username !== email) {
+          setError('Username harus sama dengan Email Anda!');
+          setLoading(false);
+          return;
+        }
         const data = await authService.register(username, email, password, 'user');
         setSuccessMsg(data.message || 'Registrasi berhasil! Silakan login.');
         setIsRegister(false);
