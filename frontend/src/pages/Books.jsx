@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Search, Plus, Edit, Trash2, BookOpen, AlertCircle, CheckCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { bookService, borrowingService } from '../services/api';
+import { bookService, borrowingService, statsService } from '../services/api';
 
 function Books({ user, token }) {
   const { searchKeyword } = useOutletContext() || {};
@@ -28,6 +28,22 @@ function Books({ user, token }) {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const limit = 10;
+
+  // Active borrow limit state
+  const [activeBorrowCount, setActiveBorrowCount] = useState(0);
+
+  const fetchUserStats = async () => {
+    if (user?.role === 'user') {
+      try {
+        const statsRes = await statsService.getUserStats();
+        if (statsRes.success) {
+          setActiveBorrowCount(statsRes.data.active_borrowings);
+        }
+      } catch (err) {
+        console.error('Gagal mengambil statistik user:', err);
+      }
+    }
+  };
   
   // Form fields
   const [judul, setJudul] = useState('');
@@ -59,6 +75,7 @@ function Books({ user, token }) {
   useEffect(() => {
     setCurrentPage(1);
     fetchBooks(searchKeyword || '', 1);
+    fetchUserStats();
   }, [token, searchKeyword]);
 
   const handlePageChange = (newPage) => {
@@ -166,7 +183,8 @@ function Books({ user, token }) {
     try {
       const data = await borrowingService.borrow(borrowBookId, borrowDuration);
       showAlert(data.message || 'Buku berhasil dipinjam.', 'success');
-      fetchBooks(search); // Refresh lists to show new stock level
+      fetchBooks(search || searchKeyword || '', currentPage); // Refresh lists to show new stock level
+      fetchUserStats(); // Update active borrowing count
     } catch (err) {
       showAlert(err.response?.data?.message || err.message || 'Gagal meminjam buku.', 'error');
     }
@@ -303,10 +321,10 @@ function Books({ user, token }) {
                       ) : (
                         <button
                           onClick={() => triggerBorrowModal(book.id, book.judul)}
-                          disabled={book.stok <= 0}
+                          disabled={book.stok <= 0 || activeBorrowCount >= 3}
                           className="px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 disabled:bg-slate-200 disabled:text-slate-400 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold text-xs transition-colors shadow-sm"
                         >
-                          {book.stok > 0 ? 'Pinjam Buku' : 'Stok Habis'}
+                          {book.stok <= 0 ? 'Stok Habis' : activeBorrowCount >= 3 ? 'Kuota Pinjam Habis' : 'Pinjam Buku'}
                         </button>
                       )}
                     </td>
@@ -497,10 +515,16 @@ function Books({ user, token }) {
                 </select>
               </div>
 
-              <div className="p-4 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 text-xs">
-                <p className="font-medium">⚠ Informasi Tenggat Waktu:</p>
-                <p className="mt-1">Buku ini harus dikembalikan paling lambat pada: <span className="font-bold">{getDueDateString(borrowDuration)}</span></p>
-              </div>
+              {activeBorrowCount >= 3 ? (
+                <div className="p-4 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-semibold">
+                  ⚠ Batas Maksimal Peminjaman Tercapai: Anda telah meminjam 3 buku. Selesaikan pengembalian terlebih dahulu untuk meminjam buku baru.
+                </div>
+              ) : (
+                <div className="p-4 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 text-xs">
+                  <p className="font-medium">⚠ Informasi Tenggat Waktu:</p>
+                  <p className="mt-1">Buku ini harus dikembalikan paling lambat pada: <span className="font-bold">{getDueDateString(borrowDuration)}</span></p>
+                </div>
+              )}
 
               <div className="flex justify-end gap-3 pt-2 border-t border-slate-200 dark:border-slate-800">
                 <button
@@ -513,7 +537,8 @@ function Books({ user, token }) {
                 <button
                   type="button"
                   onClick={submitBorrowBook}
-                  className="px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold transition-colors"
+                  disabled={activeBorrowCount >= 3}
+                  className="px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 disabled:bg-slate-200 disabled:text-slate-400 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
                 >
                   Ya, Pinjam
                 </button>

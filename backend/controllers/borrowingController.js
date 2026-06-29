@@ -1,4 +1,5 @@
 const Borrowing = require('../models/borrowingModel');
+const db = require('../config/db');
 
 class BorrowingController {
     // User borrows a book
@@ -11,6 +12,19 @@ class BorrowingController {
                 return res.status(400).json({
                     success: false,
                     message: 'ID Buku wajib disertakan.'
+                });
+            }
+
+            // Check if user reached max 3 active borrowings
+            const [[{ active_count }]] = await db.query(
+                "SELECT COUNT(*) AS active_count FROM borrowings WHERE user_id = ? AND status = 'dipinjam'",
+                [userId]
+            );
+
+            if (active_count >= 3) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Gagal meminjam! Anda telah mencapai batas maksimal peminjaman (3 buku).'
                 });
             }
 
@@ -38,7 +52,7 @@ class BorrowingController {
             });
         } catch (error) {
             // Check for custom error thrown in Model transaction block
-            if (error.message === 'Buku tidak ditemukan.' || error.message === 'Stok buku habis.') {
+            if (error.message === 'Buku tidak ditemukan.' || error.message === 'Stok buku habis.' || error.message.includes('maksimal peminjaman')) {
                 return res.status(400).json({
                     success: false,
                     message: error.message

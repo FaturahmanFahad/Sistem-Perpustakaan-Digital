@@ -11,8 +11,7 @@ function Dashboard({ user, token }) {
     total_books: 0,
     total_users: 0,
     active_borrowings: 0,
-    total_borrowings: 0,
-    return_ratio: 0
+    total_borrowings: 0
   });
 
   // User personal dashboard states
@@ -33,18 +32,16 @@ function Dashboard({ user, token }) {
       setLoading(true);
       try {
         if (user?.role === 'admin') {
-          const [statsRes, totalBooksRes, returnRatioRes] = await Promise.all([
+          const [statsRes, totalBooksRes] = await Promise.all([
             borrowingService.getStats(),
-            statsService.getTotalBooks(),
-            statsService.getReturnRatio()
+            statsService.getTotalBooks()
           ]);
 
           let combinedStats = {
             total_books: 0,
             total_users: 0,
             active_borrowings: 0,
-            total_borrowings: 0,
-            return_ratio: 0
+            total_borrowings: 0
           };
 
           if (statsRes && statsRes.success) {
@@ -52,9 +49,6 @@ function Dashboard({ user, token }) {
           }
           if (totalBooksRes && totalBooksRes.success) {
             combinedStats.total_books = totalBooksRes.data.total;
-          }
-          if (returnRatioRes && returnRatioRes.success) {
-            combinedStats.return_ratio = returnRatioRes.data.ratio;
           }
 
           setStats(combinedStats);
@@ -135,14 +129,6 @@ function Dashboard({ user, token }) {
       icon: ClipboardList,
       color: 'from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/30 hover:scale-[1.02] hover:shadow-xl transition-all duration-200 cursor-pointer',
       link: '/borrowings'
-    },
-    {
-      title: 'Rasio Pengembalian',
-      value: `${stats.return_ratio !== undefined ? stats.return_ratio : 0}%`,
-      desc: 'Persentase pengembalian buku (Klik analitik)',
-      icon: CheckCircle,
-      color: 'from-fuchsia-500/20 to-rose-500/20 text-rose-400 border-rose-500/30 hover:scale-[1.02] hover:shadow-xl transition-all duration-200 cursor-pointer',
-      link: '/history'
     }
   ];
 
@@ -177,7 +163,7 @@ function Dashboard({ user, token }) {
       {/* Stats Section */}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(user?.role === 'admin' ? 4 : 3)].map((_, i) => (
+          {[...Array(3)].map((_, i) => (
             <div key={i} className="h-32 rounded-xl bg-slate-900/40 border border-slate-800/80 animate-pulse"></div>
           ))}
         </div>
@@ -187,7 +173,7 @@ function Dashboard({ user, token }) {
         </div>
       ) : user?.role === 'admin' ? (
         /* ADMIN STATS CARDS */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {adminStatCards.map((card, idx) => {
             const Icon = card.icon;
             const CardContent = (
@@ -297,10 +283,10 @@ function Dashboard({ user, token }) {
 
                 <button
                   onClick={() => handleQuickBorrow(book.id)}
-                  disabled={book.stok <= 0 || userStats.remaining_quota <= 0}
-                  className="mt-4 w-full py-2.5 rounded-lg bg-teal-500 hover:bg-teal-600 disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold text-xs transition-colors shadow-md shadow-teal-500/10"
+                  disabled={book.stok <= 0 || userStats.remaining_quota <= 0 || userStats.active_borrowings >= 3}
+                  className="mt-4 w-full py-2.5 rounded-lg bg-teal-500 hover:bg-teal-600 disabled:bg-slate-200 disabled:text-slate-400 dark:disabled:bg-slate-800 dark:disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold text-xs transition-colors shadow-md shadow-teal-500/10"
                 >
-                  {book.stok <= 0 ? 'Stok Habis' : userStats.remaining_quota <= 0 ? 'Kuota Penuh' : 'Pinjam Buku'}
+                  {book.stok <= 0 ? 'Stok Habis' : (userStats.remaining_quota <= 0 || userStats.active_borrowings >= 3) ? 'Kuota Pinjam Habis' : 'Pinjam Buku'}
                 </button>
               </div>
             ))}
