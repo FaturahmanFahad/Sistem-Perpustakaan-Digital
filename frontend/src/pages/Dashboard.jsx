@@ -272,9 +272,13 @@ function Dashboard({ user, token }) {
             {recommendations.map((book) => (
               <div key={book.id} className="glass-panel border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-teal-500/40 transition-all group shadow-lg">
                 <div>
-                  <div className="h-40 bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900 border border-slate-700/60 rounded-lg flex flex-col items-center justify-center p-4 text-center mb-4 relative overflow-hidden group-hover:scale-[1.01] transition-transform">
-                    <BookOpen className="h-10 w-10 text-teal-400/80 mb-2" />
-                    <span className="text-xs font-bold text-slate-200 line-clamp-2 px-2">{book.judul}</span>
+                  <div className="h-48 border border-slate-850 dark:border-slate-800 rounded-lg overflow-hidden mb-4 relative group-hover:scale-[1.01] transition-transform shadow-md">
+                    <img 
+                      src={`https://loremflickr.com/320/480/book,${encodeURIComponent(book.judul.toLowerCase().trim())}`}
+                      alt={book.judul}
+                      className="w-full h-full object-cover rounded-lg"
+                      style={{ aspectRatio: '2/3' }}
+                    />
                   </div>
                   <h4 className="font-bold text-slate-100 text-base line-clamp-1 group-hover:text-teal-400 transition-colors">{book.judul}</h4>
                   <p className="text-xs text-slate-400 mt-1">Penulis: <span className="text-slate-300 font-medium">{book.penulis}</span></p>

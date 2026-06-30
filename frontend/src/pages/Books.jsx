@@ -286,8 +286,18 @@ function Books({ user, token }) {
                 {books.map((book) => (
                   <tr key={book.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/20 transition-colors">
                     <td className="py-4 px-6">
-                      <p className="font-semibold text-slate-800 dark:text-slate-100 text-base">{book.judul}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Penulis: {book.penulis}</p>
+                      <div className="flex items-center gap-3">
+                        <img 
+                          src={`https://loremflickr.com/320/480/book,${encodeURIComponent(book.judul.toLowerCase().trim())}`}
+                          alt={book.judul}
+                          className="h-14 w-10 object-cover rounded shadow-sm shrink-0 border border-slate-300 dark:border-slate-800"
+                          style={{ aspectRatio: '2/3' }}
+                        />
+                        <div>
+                          <p className="font-semibold text-slate-800 dark:text-slate-100 text-base">{book.judul}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Penulis: {book.penulis}</p>
+                        </div>
+                      </div>
                     </td>
                     <td className="py-4 px-6 text-slate-600 dark:text-slate-300">{book.penerbit}</td>
                     <td className="py-4 px-6 text-slate-600 dark:text-slate-300">{book.tahun_terbit}</td>
