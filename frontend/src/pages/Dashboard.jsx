@@ -274,7 +274,11 @@ function Dashboard({ user, token }) {
                 <div>
                   <div className="h-48 border border-slate-850 dark:border-slate-800 rounded-lg overflow-hidden mb-4 relative group-hover:scale-[1.01] transition-transform shadow-md">
                     <img 
-                      src={`https://loremflickr.com/320/480/book,${encodeURIComponent(book.judul.toLowerCase().trim())}`}
+                      src={`/covers/${book.judul.toLowerCase().replace(/ /g, '-')}-${book.penulis.toLowerCase().replace(/ /g, '-')}.jpg`}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/covers/default-book.jpg';
+                      }}
                       alt={book.judul}
                       className="w-full h-full object-cover rounded-lg"
                       style={{ aspectRatio: '2/3' }}
