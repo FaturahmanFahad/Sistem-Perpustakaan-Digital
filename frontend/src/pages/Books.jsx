@@ -288,7 +288,7 @@ function Books({ user, token }) {
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <img 
-                          src={`https://loremflickr.com/320/480/${encodeURIComponent(book.judul)}`}
+                          src="/covers/system-library-digital.png"
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/covers/default-book.jpg';

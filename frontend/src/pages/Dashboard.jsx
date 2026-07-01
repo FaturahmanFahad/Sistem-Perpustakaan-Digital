@@ -274,7 +274,7 @@ function Dashboard({ user, token }) {
                 <div>
                   <div className="h-48 border border-slate-850 dark:border-slate-800 rounded-lg overflow-hidden mb-4 relative group-hover:scale-[1.01] transition-transform shadow-md">
                     <img 
-                      src={`https://loremflickr.com/320/480/${encodeURIComponent(book.judul)}`}
+                      src="/covers/system-library-digital.png"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = '/covers/default-book.jpg';
