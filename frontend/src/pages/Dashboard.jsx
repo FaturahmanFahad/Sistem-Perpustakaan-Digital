@@ -274,14 +274,14 @@ function Dashboard({ user, token }) {
                 <div>
                   <div className="h-48 border border-slate-850 dark:border-slate-800 rounded-lg overflow-hidden mb-4 relative group-hover:scale-[1.01] transition-transform shadow-md">
                     <img 
-                      src={`/covers/${book.judul.toLowerCase().replace(/ /g, '-')}-${book.penulis.toLowerCase().replace(/ /g, '-')}.jpg`}
+                      src={`https://loremflickr.com/320/480/${encodeURIComponent(book.judul)}`}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = '/covers/default-book.jpg';
                       }}
                       alt={book.judul}
-                      className="w-full h-full object-cover rounded-lg"
-                      style={{ aspectRatio: '2/3' }}
+                      className="w-full h-full object-cover"
+                      style={{ aspectRatio: '2/3', borderRadius: '12px' }}
                     />
                   </div>
                   <h4 className="font-bold text-slate-100 text-base line-clamp-1 group-hover:text-teal-400 transition-colors">{book.judul}</h4>

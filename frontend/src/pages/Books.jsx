@@ -288,14 +288,14 @@ function Books({ user, token }) {
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <img 
-                          src={`/covers/${book.judul.toLowerCase().replace(/ /g, '-')}-${book.penulis.toLowerCase().replace(/ /g, '-')}.jpg`}
+                          src={`https://loremflickr.com/320/480/${encodeURIComponent(book.judul)}`}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/covers/default-book.jpg';
                           }}
                           alt={book.judul}
-                          className="h-14 w-10 object-cover rounded shadow-sm shrink-0 border border-slate-300 dark:border-slate-800"
-                          style={{ aspectRatio: '2/3' }}
+                          className="h-14 w-10 object-cover shrink-0 border border-slate-300 dark:border-slate-800 shadow-sm"
+                          style={{ aspectRatio: '2/3', borderRadius: '12px' }}
                         />
                         <div>
                           <p className="font-semibold text-slate-800 dark:text-slate-100 text-base">{book.judul}</p>
